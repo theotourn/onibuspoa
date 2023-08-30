@@ -12,8 +12,10 @@ import { NavComponent } from './components/nav/nav.component';
 import { HomeComponent } from './routes/home/home.component';
 import { AboutComponent } from './routes/about/about.component';
 import { BusListComponent } from './routes/bus-list/bus-list.component';
-import { SchedulesComponent } from './components/schedules/schedules.component';
 import { NumberListComponent } from './components/number-list/number-list.component';
+import { SchedulesModule } from './modules/schedules/schedules.module';
+import { BusService } from './services/bus-list-service.service';
+import { BusSelectionService } from './services/bus-selection.service';
 
 @NgModule({
   declarations: [
@@ -22,10 +24,10 @@ import { NumberListComponent } from './components/number-list/number-list.compon
     HomeComponent,
     AboutComponent,
     BusListComponent,
-    SchedulesComponent,
     NumberListComponent
   ],
   imports: [
+    SchedulesModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -33,7 +35,9 @@ import { NumberListComponent } from './components/number-list/number-list.compon
     CommonModule
   ],
   providers: [
-    BusScheduleService
+    BusScheduleService,
+    BusSelectionService,
+    BusService
   ],
   bootstrap: [AppComponent]
 })

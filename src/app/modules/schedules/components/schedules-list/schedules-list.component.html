@@ -1,0 +1,20 @@
+<div>
+    <div class="text-center mt-3" *ngIf="isLoading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+    </div>
+    <div class="list-group list-group-flush">
+        <ng-container *ngFor="let sentidoKey of getObjectKeys(horarios)">
+            <h3 class="list-group-item text-center mt-4 fw-bold">{{ sentidoKey }}</h3>
+            <ng-container *ngFor="let tipoDiaKey of getObjectKeys(horarios[sentidoKey]).sort(sortTiposDia)">
+                <div class="list-group-item text-center">
+                    <h4 class="mt-2">{{ formatarNomeDia(tipoDiaKey) }}</h4>
+                    <div *ngFor="let horario of horarios[sentidoKey][tipoDiaKey]" class="badge bg-success m-1">
+                        {{ horario.horario_largada }}
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>

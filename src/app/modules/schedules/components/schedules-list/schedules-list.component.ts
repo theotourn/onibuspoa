@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { BusScheduleService } from 'src/app/services/services.service';
+import { BusSelectionService } from 'src/app/services/bus-selection.service';
 
 @Component({
-  selector: 'app-schedules',
-  templateUrl: './schedules.component.html',
-  styleUrls: ['./schedules.component.css'],
+  selector: 'app-schedules-list',
+  templateUrl: './schedules-list.component.html',
+  styleUrls: ['./schedules-list.component.css']
 })
-export class SchedulesComponent {
-  linha: string = '';
+export class SchedulesListComponent {
+  receivedValue: string = '';
   horarios: any = {};
   isLoading: boolean = false;
 
@@ -15,12 +16,29 @@ export class SchedulesComponent {
     return Object.keys(obj);
   }
 
-  constructor(private busScheduleService: BusScheduleService) { }
+  receiveValue(value: string) {
+    this.receivedValue = value;
+    if (value) {
+      this.consultarHorarios();
+    }
+  }
+
+  constructor(private busScheduleService: BusScheduleService, private BusSelectionService: BusSelectionService) { }
+
+  ngOnInit() {
+    this.BusSelectionService.getSelectedBusCode().subscribe(busCode => {
+      if (busCode) {
+        this.receivedValue = busCode;
+        this.consultarHorarios();
+      }
+    });
+  }
 
   async consultarHorarios() {
     try {
       this.isLoading = true;
-      const linhaSemPonto = this.linha.replace('.', '');
+      const linhaSemPonto = this.receivedValue.replace(/[.-]/g, '')
+      console.log(this.receivedValue)
       const response = await this.busScheduleService.getScheduleByLine(linhaSemPonto).toPromise();
       const horariosAPI = response.result.records;
       const horariosFiltrados = horariosAPI.filter((horario: any) => horario.tipo_tabela === 'OFICIAL');
